@@ -24,7 +24,7 @@ class ImageResizingProvider(object):
     """Provider for generating resizable image urls.
 
     """
-    def resize_image(self, image, width=None, censor_nsfw=False, max_ratio=None):
+    def resize_image(self, image, width=None, censor_nsfw=False, max_ratio=None, file_type=None):
         """Turn a url of an image in storage into one that will produce a
         resized image.
 

@@ -40,7 +40,7 @@ class ImgixImageResizingProvider(ImageResizingProvider):
         ],
     }
 
-    def resize_image(self, image, width=None, censor_nsfw=False, max_ratio=None):
+    def resize_image(self, image, width=None, censor_nsfw=False, max_ratio=None, file_type=None):
         url = UrlParser(image['url'])
         url.hostname = g.imgix_domain
         # Let's encourage HTTPS; it's cool, works just fine on HTTP pages, and
