@@ -280,8 +280,10 @@ class Subreddit(Thing, Printable, BaseSite):
                                                'gilding_server_seconds',
                                                'ban_count')
 
+
     sr_limit = 50
     gold_limit = 100
+    allow_images = None
     DEFAULT_LIMIT = object()
 
     ICON_EXACT_SIZE = (256, 256)
