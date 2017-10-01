@@ -38,8 +38,6 @@ import sys
 
 from sqlalchemy import engine, event
 from baseplate import Baseplate, config as baseplate_config
-from baseplate.thrift_pool import ThriftConnectionPool
-from baseplate.context.thrift import ThriftContextFactory
 from baseplate.server import einhorn
 
 import pkg_resources
@@ -65,8 +63,6 @@ from r2.lib.cache import (
 )
 from r2.lib.configparse import ConfigValue, ConfigValueParser
 from r2.lib.contrib import ipaddress
-from r2.lib.contrib.activity_thrift import ActivityService
-from r2.lib.contrib.activity_thrift.ttypes import ActivityInfo
 from r2.lib.eventcollector import EventQueue
 from r2.lib.lock import make_lock_factory
 from r2.lib.manager import db_manager
@@ -772,6 +768,10 @@ class Globals(object):
         ################# THRIFT-BASED SERVICES
         activity_endpoint = self.config.get("activity_endpoint")
         if activity_endpoint:
+            from baseplate.thrift_pool import ThriftConnectionPool
+            from baseplate.context.thrift import ThriftContextFactory
+            from r2.lib.contrib.activity_thrift import ActivityService
+            from r2.lib.contrib.activity_thrift.ttypes import ActivityInfo
             # make ActivityInfo objects rendercache-key friendly
             # TODO: figure out a more general solution for this if
             # we need to do this for other thrift-generated objects
