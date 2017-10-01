@@ -682,28 +682,32 @@ class Globals(object):
         self.startup_timer.intermediate("configuration")
 
         ################# ZOOKEEPER
-        zk_hosts = self.config["zookeeper_connection_string"]
-        zk_username = self.config["zookeeper_username"]
-        zk_password = self.config["zookeeper_password"]
-        self.zookeeper = connect_to_zookeeper(zk_hosts, (zk_username,
-                                                         zk_password))
-
-        self.throttles = IPNetworkLiveList(
-            self.zookeeper,
-            root="/throttles",
-            reduced_data_node="/throttles_reduced",
-        )
+        def connect_to_zookeeper():
+            zk_hosts = self.config["zookeeper_connection_string"]
+            zk_username = self.config["zookeeper_username"]
+            zk_password = self.config["zookeeper_password"]
+            self.zookeeper = connect_to_zookeeper(zk_hosts, (zk_username,
+                                                                 zk_password))
+            self.throttles = IPNetworkLiveList(
+                self.zookeeper,
+                root="/throttles",
+                reduced_data_node="/throttles_reduced",
+            )
 
         parser = ConfigParser.RawConfigParser()
         parser.optionxform = str
         parser.read([self.config["__file__"]])
 
         if self.config["liveconfig_source"] == "zookeeper":
+            if not getattr(self, 'zookeeper', None):
+                connect_to_zookeeper()
             self.live_config = LiveConfig(self.zookeeper, LIVE_CONFIG_NODE)
         else:
             self.live_config = extract_live_config(parser, self.plugins)
 
         if self.config["secrets_source"] == "zookeeper":
+            if not getattr(self, 'zookeeper', None):
+                connect_to_zookeeper()
             self.secrets = fetch_secrets(self.zookeeper)
         else:
             self.secrets = extract_secrets(parser)
