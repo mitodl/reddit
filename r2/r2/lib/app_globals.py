@@ -686,7 +686,7 @@ class Globals(object):
         self.startup_timer.intermediate("configuration")
 
         ################# ZOOKEEPER
-        def connect_to_zookeeper():
+        def create_zookeeper_connection():
             zk_hosts = self.config["zookeeper_connection_string"]
             zk_username = self.config["zookeeper_username"]
             zk_password = self.config["zookeeper_password"]
@@ -704,17 +704,19 @@ class Globals(object):
 
         if self.config["liveconfig_source"] == "zookeeper":
             if not getattr(self, 'zookeeper', None):
-                connect_to_zookeeper()
+                create_zookeeper_connection()
             self.live_config = LiveConfig(self.zookeeper, LIVE_CONFIG_NODE)
         else:
             self.live_config = extract_live_config(parser, self.plugins)
+            self.throttles = {}
 
         if self.config["secrets_source"] == "zookeeper":
             if not getattr(self, 'zookeeper', None):
-                connect_to_zookeeper()
+                create_zookeeper_connection()
             self.secrets = fetch_secrets(self.zookeeper)
         else:
             self.secrets = extract_secrets(parser)
+            self.throttles = {}
 
         ################# PRIVILEGED USERS
         self.admins = PermissionFilteredEmployeeList(
