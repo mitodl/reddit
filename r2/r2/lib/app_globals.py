@@ -39,6 +39,8 @@ import sys
 from sqlalchemy import engine, event
 from baseplate import Baseplate, config as baseplate_config
 from baseplate.server import einhorn
+from baseplate.thrift_pool import ThriftConnectionPool
+from baseplate.context.thrift import ThriftContextFactory
 
 import pkg_resources
 import pytz
@@ -772,8 +774,6 @@ class Globals(object):
         ################# THRIFT-BASED SERVICES
         activity_endpoint = self.config.get("activity_endpoint")
         if activity_endpoint:
-            from baseplate.thrift_pool import ThriftConnectionPool
-            from baseplate.context.thrift import ThriftContextFactory
             from r2.lib.contrib.activity_thrift import ActivityService
             from r2.lib.contrib.activity_thrift.ttypes import ActivityInfo
             # make ActivityInfo objects rendercache-key friendly
