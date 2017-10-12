@@ -654,6 +654,8 @@ class OAuth2AccessToken(Token):
             raise
         except NotFound:
             return False
+        except tdb_cassandra.NotFound:
+            return False
 
         # Is the user account still valid?
         if self.user_id:
