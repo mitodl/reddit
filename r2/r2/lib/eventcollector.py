@@ -85,6 +85,7 @@ class EventQueue(object):
         self.queue = queue
 
     def save_event(self, event):
+        return # don't track events
         if event.testing:
             queue_name = "event_collector_test"
         else:
