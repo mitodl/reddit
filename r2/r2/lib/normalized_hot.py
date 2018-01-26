@@ -54,7 +54,7 @@ def get_hot_tuples(sr_ids, ageweight=None):
             # heapq.merge sorts from smallest to largest so we need to flip
             # ehot and hot to get the hottest links first
             tuples_by_srid[sr_id].append(
-                (-effective_hot, -hot, link_name, timestamp)
+                (-hot, -hot, link_name, timestamp)
             )
 
     return tuples_by_srid
